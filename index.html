@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Janix-home | Janix-dev</title>
+  <style>
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    header {
+      background: #1e293b;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      color: #38bdf8;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      color: #e2e8f0;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #38bdf8;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      padding: 2rem;
+    }
+
+    .hero h2 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #38bdf8;
+    }
+
+    .hero p {
+      max-width: 600px;
+      font-size: 1.2rem;
+      color: #cbd5e1;
+    }
+
+    .btn {
+      margin-top: 2rem;
+      padding: 0.8rem 1.5rem;
+      background: #38bdf8;
+      color: #0f172a;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background: #0ea5e9;
+    }
+
+    section {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: #38bdf8;
+    }
+
+    .repo-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .repo {
+      background: #1e293b;
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: left;
+      transition: transform 0.2s;
+    }
+
+    .repo:hover {
+      transform: translateY(-5px);
+    }
+
+    .repo a {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #38bdf8;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .repo p {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .footer {
+      background: #1e293b;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Janix-dev</h1>
+    <nav>
+      <a href="#repos">Repositories</a>
+      <a href="https://github.com/janix-dev" target="_blank">GitHub</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Welcome to Janix-home</h2>
+    <p>Explore my GitHub projects and development journey 🚀</p>
+    <a class="btn" href="#repos">View My Work</a>
+  </section>
+
+  <section id="repos">
+    <h3>GitHub Repositories</h3>
+    <div class="repo-list" id="repoList">Loading repositories...</div>
+  </section>
+
+  <footer class="footer">
+    &copy; <span id="year"></span> Janix-dev | Built with ❤️
+  </footer>
+
+  <script>
+    // Update year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Fetch GitHub Repos
+    async function loadRepos() {
+      const repoList = document.getElementById("repoList");
+      try {
+        const response = await fetch("https://api.github.com/users/janix-dev/repos");
+        const repos = await response.json();
+
+        repoList.innerHTML = repos.map(repo => `
+          <div class="repo">
+            <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+            <p>${repo.description || "No description provided."}</p>
+          </div>
+        `).join("");
+      } catch (error) {
+        repoList.innerHTML = "<p>Failed to load repositories. Please try again later.</p>";
+      }
+    }
+
+    loadRepos();
+  </script>
+</body>
+</html>
